@@ -1,0 +1,28 @@
+{
+  "name": "test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack | webpack-dev-server --content-base build/ --hot",
+    "build": "webpack | node ./index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alstolbov/testPhaser.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alstolbov/testPhaser/issues"
+  },
+  "homepage": "https://github.com/alstolbov/testPhaser#readme",
+  "dependencies": {
+    "express": "^4.13.3",
+    "file-loader": "^0.8.4",
+    "html-webpack-plugin": "^1.6.1",
+    "url-loader": "^0.5.6",
+    "webpack": "^1.11.0"
+  }
+}
