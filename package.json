@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack | webpack-dev-server --content-base build/ --hot",
+    "start": "webpack | webpack-dev-server --content-base public/ --hot",
     "build": "webpack | node ./index.js"
   },
   "repository": {
@@ -20,9 +20,6 @@
   "homepage": "https://github.com/alstolbov/testPhaser#readme",
   "dependencies": {
     "express": "^4.13.3",
-    "file-loader": "^0.8.4",
-    "html-webpack-plugin": "^1.6.1",
-    "url-loader": "^0.5.6",
     "webpack": "^1.11.0"
   }
 }
