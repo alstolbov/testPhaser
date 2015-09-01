@@ -20,6 +20,7 @@
   "homepage": "https://github.com/alstolbov/testPhaser#readme",
   "dependencies": {
     "express": "^4.13.3",
+    "lodash": "^3.10.1",
     "webpack": "^1.11.0"
   }
 }
