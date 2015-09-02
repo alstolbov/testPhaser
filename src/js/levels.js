@@ -10,11 +10,13 @@ module.exports = {
             }
         },
         places: {
-            'red': {
-                coord: [400, 300]
+            'sun': {
+                coord: [300, 100],
+                color: 'red'
             },
-            'green': {
-                coord: [480, 300]
+            'grow': {
+                coord: [380, 100],
+                color: 'red'
             }
         }
     }

@@ -11,11 +11,39 @@ var newMarkerObj = require('../level-objects/marker');
 
 var newPlaceObj = require('../level-objects/place');
 
+var options = {
+    markerStartPos: [100, 300],
+    markerSize: {
+        width: 25,
+        height: 41
+    },
+    markerPadding: 10
+};
+
+function getMarkerPos () {
+    var count = 0;
+
+    if (Store.levelObjList.markers) {
+        count = _.size(Store.levelObjList.markers);
+    }
+
+    var x = options.markerStartPos[0] +
+        count*(
+            options.markerSize.width +
+            options.markerPadding
+        )
+    ;
+
+    var y = options.markerStartPos[1];
+
+    return [x, y];
+}
+
 module.exports = function() {
     var _this = this;
-    Store.state.isActiveDrag = false;
-    Store.state.activeMarker = '';
-    Store.state.activePlace = '';
+    // Store.state.isActiveDrag = false;
+    // Store.state.activeMarker = '';
+    // Store.state.activePlace = '';
     this.stage.backgroundColor = 0xffffff;
 
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -24,37 +52,32 @@ module.exports = function() {
     _.forEach(
         placeList,
         function (placeData, placeName) {
-            var data = placeData;
-            placeData.name = placeName;
-
             var place = newPlaceObj.call(
                 _this,
-                data
+                {
+                    coord: placeData.coord,
+                    name: placeName
+                }
             );
 
-            if (!Store.levelObjList.places) {
-                Store.levelObjList.places = {};
-            }
-
             Store.levelObjList.places[placeName] = place;
-
+            Store.state.placeState[placeName] = {
+                color: placeData.color,
+                state: 'uncolorize'
+            };
         }
     );
 
     _.forEach(
         markerList,
         function (markerData, markerName) {
-            var data = markerData;
-            data.name = markerName;
-
             var obj = newMarkerObj.call(
                 _this,
-                data
+                {
+                    name: markerName,
+                    coord: getMarkerPos()
+                }
             );
-
-            if (!Store.levelObjList.markers) {
-                Store.levelObjList.markers = {};
-            }
 
             Store.levelObjList.markers[markerName] = obj;
         }

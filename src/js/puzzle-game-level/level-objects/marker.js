@@ -36,21 +36,25 @@ function onDragStop (currentSprite){
     Store.state.isActiveDrag = false;
     var endSprite;
     var isNeed = true;
+    var currentPlaceStore;
 
     if (Store.levelObjList.places[Store.state.activePlace]) {
         endSprite = Store.levelObjList.places[Store.state.activePlace];
         endSprite.scale.setTo(1, 1);
+        currentPlaceStore = Store.state.placeState[Store.state.activePlace];
         isNeed = !this.game.physics.arcade.overlap(
             currentSprite,
             endSprite,
             function() {
-                if (Store.state.activeMarker == Store.state.activePlace) {
-                    currentSprite.input.draggable = false;
-                    currentSprite.position.copyFrom(endSprite.position); 
-                    currentSprite.anchor.setTo(endSprite.anchor.x, endSprite.anchor.y);
-                } else {
-                    currentSprite.position.copyFrom(currentSprite.originalPosition);
+                if (Store.state.activeMarker == currentPlaceStore.color &&
+                    currentPlaceStore.state == 'uncolorize'
+                ) {
+                    // currentSprite.input.draggable = false;
+                    // currentSprite.position.copyFrom(endSprite.position); 
+                    // currentSprite.anchor.setTo(endSprite.anchor.x, endSprite.anchor.y);
+                    Store.state.placeState[Store.state.activePlace].state = 'colorize';
                 }
+                currentSprite.position.copyFrom(currentSprite.originalPosition);
             }
         );
     }
