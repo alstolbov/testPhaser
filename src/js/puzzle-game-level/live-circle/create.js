@@ -1,23 +1,11 @@
 var _ = require('lodash');
+var GameStore = require('../../game-store');
 var Store = require('../store');
+var Levels = require('../../levels');
 
-var colorList = {
-    'red': {
-        coord: [300, 300]
-    },
-    'green': {
-        coord: [325, 300]
-    }
-};
+var markerList = Levels[GameStore.currentLevel].markers;
 
-var placeList = {
-    'red': {
-        coord: [400, 300]
-    },
-    'green': {
-        coord: [480, 300]
-    }
-};
+var placeList = Levels[GameStore.currentLevel].places;
 
 var newMarkerObj = require('../level-objects/marker');
 
@@ -54,7 +42,7 @@ module.exports = function() {
     );
 
     _.forEach(
-        colorList,
+        markerList,
         function (markerData, markerName) {
             var data = markerData;
             data.name = markerName;

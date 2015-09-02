@@ -1,6 +1,10 @@
+var GameStore = require('./game-store');
+var Levels = require('./levels');
+
+GameStore.currentLevel = '1. Simple';
+
+var puzzleGameLevel = require('./puzzle-game-level/index');
+
 var game = new Phaser.Game(800, 600, Phaser.AUTO, 'game');
-
-var main_state = require('./game-level/index');
-
-game.state.add('main', main_state);  
-game.state.start('main');  
+game.state.add('puzzle-game-level', puzzleGameLevel);  
+game.state.start('puzzle-game-level');  
