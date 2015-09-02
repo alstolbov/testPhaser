@@ -3,91 +3,73 @@ var Store = require('../store');
 
 var colorList = {
     'red': {
-        coord: [100, 100]
+        coord: [300, 300]
     },
     'green': {
-        coord: [125, 100]
+        coord: [325, 300]
     }
 };
 
-var newColorObj = function (data) {
-    var colorObj = this.add.sprite(data.coord[0], data.coord[1], 'marker');
-    colorObj.anchor.setTo(0.5, 0.5);
-    this.game.physics.arcade.enable(colorObj);
-
-    colorObj.inputEnabled = true;
-    colorObj.input.enableDrag();
-    colorObj.originalPosition = colorObj.position.clone();
-    colorObj.events.onDragStart.add(
-        function (sprite, pointer) {
-            console.log(data.name);
-            this.onDragStart(sprite, pointer);
-        },
-        this
-    );
-    colorObj.events.onDragStop.add(
-        function(currentSprite){
-            this.onDragStop(currentSprite, Store.levelObjList.trash);
-        },
-        this
-    );
-
-    // if (!Store.levelObjList.colors) {
-    //     Store.levelObjList.colors = {};
-    // }
-    // Store.levelObjList.colors[data.name] = colorObj;
-    return colorObj;
+var placeList = {
+    'red': {
+        coord: [400, 300]
+    },
+    'green': {
+        coord: [480, 300]
+    }
 };
+
+var newMarkerObj = require('../level-objects/marker');
+
+var newPlaceObj = require('../level-objects/place');
 
 module.exports = function() {
     var _this = this;
     Store.state.isActiveDrag = false;
-    Store.state.activeColor = '';
+    Store.state.activeMarker = '';
+    Store.state.activePlace = '';
     this.stage.backgroundColor = 0xffffff;
 
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
-    Store.levelObjList.trash = this.add.sprite(this.game.world.centerX + 100, this.game.world.centerY, 'trashSprite');
-    Store.levelObjList.trash.anchor.setTo(0.5, 0.5);
-    Store.levelObjList.trash.tint= 0xff00ff;
-    this.game.physics.arcade.enable(Store.levelObjList.trash);
-
-    // var trash2 = this.add.sprite(this.game.world.centerX + 100, this.game.world.centerY - 50, 'trashSprite');
-    // trash2.anchor.setTo(0.5, 0.5);
-    // trash2.game.physics.arcade.enable(trash);
-
-    // trash.inputEnabled = true;
-    // trash.events.onInputOver.add(this.onMouseOver, this);
-    // trash.events.onInputOut.add(this.onMouseOut, this);
-
+    Store.levelObjList.placeGroup = this.game.add.group();
     _.forEach(
-        colorList,
-        function (colorData, colorName) {
-            var data = colorData;
-            data.name = colorName;
-            var obj = newColorObj.call(
+        placeList,
+        function (placeData, placeName) {
+            var data = placeData;
+            placeData.name = placeName;
+
+            var place = newPlaceObj.call(
                 _this,
                 data
             );
 
-            if (!Store.levelObjList.colors) {
-                Store.levelObjList.colors = {};
+            if (!Store.levelObjList.places) {
+                Store.levelObjList.places = {};
             }
 
-            Store.levelObjList.colors[colorName] = obj;
-            //     newColorObj.call(
-            //         _this,
-            //         colorData
-            //     )
-            // ;
+            Store.levelObjList.places[placeName] = place;
+
         }
     );
 
-    // newColorObj.call(
-    //     this,
-    //     {
-    //         x: this.game.world.centerX,
-    //         y: this.game.world.centerY
-    //     }
-    // );
+    _.forEach(
+        colorList,
+        function (markerData, markerName) {
+            var data = markerData;
+            data.name = markerName;
+
+            var obj = newMarkerObj.call(
+                _this,
+                data
+            );
+
+            if (!Store.levelObjList.markers) {
+                Store.levelObjList.markers = {};
+            }
+
+            Store.levelObjList.markers[markerName] = obj;
+        }
+    );
+
 }
