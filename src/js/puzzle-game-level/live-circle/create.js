@@ -3,41 +3,36 @@ var GameStore = require('../../game-store');
 var Store = require('../store');
 var Levels = require('../../levels');
 
-var markerList = Levels[GameStore.currentLevel].markers;
+var currentLevel = Levels[GameStore.currentLevel];
+var markerList = currentLevel.markers;
+var placeList = currentLevel.places;
 
-var placeList = Levels[GameStore.currentLevel].places;
+Store.state.needForColorize = currentLevel.statistic.needForColorize;
 
 var newMarkerObj = require('../level-objects/marker');
 
 var newPlaceObj = require('../level-objects/place');
 
-var options = {
-    markerStartPos: [100, 300],
-    markerSize: {
-        width: 25,
-        height: 41
-    },
-    markerPadding: 10
-};
+var commonFunction = require('../common-function');
 
-function getMarkerPos () {
-    var count = 0;
+// function getMarkerPos () {
+//     var count = 0;
 
-    if (Store.levelObjList.markers) {
-        count = _.size(Store.levelObjList.markers);
-    }
+//     if (Store.levelObjList.markers) {
+//         count = _.size(Store.levelObjList.markers);
+//     }
 
-    var x = options.markerStartPos[0] +
-        count*(
-            options.markerSize.width +
-            options.markerPadding
-        )
-    ;
+//     var x = options.markerStartPos[0] +
+//         count*(
+//             options.markerSize.width +
+//             options.markerPadding
+//         )
+//     ;
 
-    var y = options.markerStartPos[1];
+//     var y = options.markerStartPos[1];
 
-    return [x, y];
-}
+//     return [x, y];
+// }
 
 module.exports = function() {
     var _this = this;
@@ -52,35 +47,52 @@ module.exports = function() {
     _.forEach(
         placeList,
         function (placeData, placeName) {
+            // if (placeData.onStart) {
+            var colorizeStatus;
+            placeData.name = placeName;
+
+            if (placeData.options.needColor) {
+                colorizeStatus = 'uncolorize';
+            } else {
+                colorizeStatus = 'colorize';
+            }
+
             var place = newPlaceObj.call(
                 _this,
-                {
-                    coord: placeData.coord,
-                    name: placeName
-                }
+                placeData
             );
+
+            // if (!placeData.onStart) {
+            //     place.alpha = 0;
+            // }
 
             Store.levelObjList.places[placeName] = place;
             Store.state.placeState[placeName] = {
                 color: placeData.color,
-                state: 'uncolorize'
+                state: colorizeStatus,
+                isShow: placeData.onStart
             };
+            // }
         }
     );
 
     _.forEach(
         markerList,
-        function (markerData, markerName) {
+        function (markerName) {
             var obj = newMarkerObj.call(
                 _this,
                 {
                     name: markerName,
-                    coord: getMarkerPos()
+                    coord: commonFunction.getMarkerPos()
                 }
             );
 
             Store.levelObjList.markers[markerName] = obj;
         }
     );
+
+    var directions = "Need colorize: " + Store.state.needForColorize;
+    var style = { font: "12px Arial", fill: "#666", align: "center" };
+    Store.levelObjList.statisticText = this.game.add.text(10, 10, directions, style);
 
 }

@@ -12,6 +12,15 @@ module.exports = function (data) {
     placeObj.events.onInputOver.add(onMouseOver, this);
     placeObj.events.onInputOut.add(onMouseOut, this);
 
+    if (!data.onStart) {
+        placeObj.alpha = 0;
+    }
+
+    if (!data.options.needColor) {
+       placeObj.tint = 0xff00ff;
+       placeObj.loadTexture(placeSprite, 3);
+    }
+
     return placeObj;
 };
 

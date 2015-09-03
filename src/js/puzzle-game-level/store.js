@@ -2,14 +2,16 @@ module.exports = {
 
     levelObjList: {
         places: {},
-        markers: {}
+        markers: {},
+        statisticText: false
     },
 
     state: {
         isActiveDrag: false,
         activeMarker: '',
         activePlace: '',
-        placeState: {}
+        placeState: {},
+        needForColorize: 0
     }
 
 };

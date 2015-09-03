@@ -10,14 +10,23 @@ module.exports = function() {
             Store.levelObjList.places,
             function (place, placeName) {
                 var res = compareObj.call(_this, obj, place);
-                if (!res) {
-                    place.bringToTop();
-                    place.scale.setTo(2, 2);
-                    place.loadTexture('place_' + placeName, 1);
-                    Store.state.activePlace = placeName;
-                } else {
-                    place.scale.setTo(1, 1);
-                    place.loadTexture('place_' + placeName, 0);
+                var placeState = Store.state.placeState[placeName];
+                if (placeState.state == 'uncolorize' &&
+                    placeState.isShow
+                ) {
+                    if (!res) {
+                        place.bringToTop();
+                        place.scale.setTo(2, 2);
+                        place.loadTexture('place_' + placeName, 1);
+                        Store.state.activePlace = placeName;
+                        // if (Store.state.placeState[placeName].color == Store.state.activeMarker) {
+                        //     obj.alpha = 1;
+                        // }
+                    } else {
+                        place.scale.setTo(1, 1);
+                        place.loadTexture('place_' + placeName, 0);
+                        // obj.alpha = 0.5;
+                    }
                 }
             }
         );
