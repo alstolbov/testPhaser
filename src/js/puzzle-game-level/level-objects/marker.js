@@ -21,6 +21,7 @@ function create(data) {
     markerObj.inputEnabled = true;
     if (data.isShow) {
         markerObj.input.enableDrag();
+        this.game.add.tween(markerObj).to({angle: 20}, 1000, Phaser.Easing.Linear.NONE, true, 0, 1000, true);
     }
     markerObj.originalPosition = markerObj.position.clone();
     markerObj.events.onDragStart.add(
@@ -54,6 +55,8 @@ function onDragStop (currentSprite){
     var currentPlaceOptions;
     var isNeed = true;
 
+    var executedScreenPlay = [];
+
     if (Store.levelObjList.places[Store.state.activePlace]) {
         currentPlace = Store.levelObjList.places[Store.state.activePlace];
         currentPlace.scale.setTo(1, 1);
@@ -80,12 +83,16 @@ function onDragStop (currentSprite){
                         Store.levelObjList.statisticText.text = 'Great!';
                     }
 
-                    if (currentPlaceOptions.openPlace) {
+                    if (currentPlaceOptions.openPlace &&
+                        !Store.state.placeState[currentPlaceOptions.openPlace].isShow
+                    ) {
                         Store.levelObjList.places[currentPlaceOptions.openPlace].alpha = 1;
                         Store.state.placeState[currentPlaceOptions.openPlace].isShow = true;
 
                         var nextPlaceOptions = Levels[GameState.currentLevel].places[currentPlaceOptions.openPlace].options;
-                        if (nextPlaceOptions.getColor) {
+                        if (!nextPlaceOptions.needColor && 
+                            nextPlaceOptions.getColor
+                        ) {
                             if (!Store.state.markerState[nextPlaceOptions.getColor].isShow) {
                                 Store.levelObjList.markers[nextPlaceOptions.getColor].alpha = 1;
                                 Store.levelObjList.markers[nextPlaceOptions.getColor].input.enableDrag();
@@ -93,6 +100,12 @@ function onDragStop (currentSprite){
                             }
                         }
                     }
+
+                    executedScreenPlay = checkScreenplay();
+                    if (executedScreenPlay.length) {
+                        execScreenPlay.call(_this, executedScreenPlay);
+                    }
+                    console.log(executedScreenPlay);
                 }
             }
         );
@@ -100,10 +113,61 @@ function onDragStop (currentSprite){
     }
 
     currentSprite.alpha = 1;
-    
 
     currentSprite.position.copyFrom(currentSprite.originalPosition);
 
     Store.state.activeMarker = '';
     Store.state.activePlace = '';
 };
+
+function checkScreenplay () {
+    var newScreenplays = {};
+    var res = [];
+    _.forEach(
+        Store.state.screenplays,
+        function (screenplayData, screenplayName) {
+            var isExecute = true;
+            _.forEach(
+                screenplayData.placesColorized,
+                function (place) {
+                    if (Store.state.placeState[place].state !== 'colorize') {
+                        isExecute = false;
+                    }
+                }
+            )
+            if (isExecute) {
+                res.push(screenplayName);
+            } else {
+                newScreenplays[screenplayName] = screenplayData;
+            }
+        }
+    );
+
+    Store.state.screenplays = newScreenplays;
+
+    return res;
+};
+
+function execScreenPlay (screenplayArray) {
+    var _this = this;
+    var screenplays = Levels[GameState.currentLevel].screenplay;
+    _.forEach(
+        screenplayArray,
+        function (screenPlayName) {
+            if (screenplays[screenPlayName].result.getColor) {
+                getMarkerActive.call(_this, screenplays[screenPlayName].result.getColor);
+            }
+        }
+    );
+}
+
+function getMarkerActive (markerName) {
+    var marker = Store.levelObjList.markers[markerName];
+    var markerState = Store.state.markerState[markerName].isShow;
+    if (!Store.state.markerState[markerName].isShow) {
+        marker.alpha = 1;
+        marker.input.enableDrag();
+        this.game.add.tween(marker).to({angle: 20}, 1000, Phaser.Easing.Linear.NONE, true, 0, 1000, true);
+        Store.state.markerState[markerName].isShow = true;
+    }
+}

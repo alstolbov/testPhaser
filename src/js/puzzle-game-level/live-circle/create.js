@@ -21,6 +21,8 @@ module.exports = function() {
     // Store.state.activePlace = '';
     this.stage.backgroundColor = 0xffffff;
 
+    Store.state.screenplays = currentLevel.screenplay;
+
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
     Store.levelObjList.placeGroup = this.game.add.group();

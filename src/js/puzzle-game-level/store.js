@@ -10,8 +10,10 @@ module.exports = {
         isActiveDrag: false,
         activeMarker: '',
         activePlace: '',
+        activeNextMarker: '',
         placeState: {},
         markerState: {},
+        screenplays: {},
         needForColorize: 0
     }
 
