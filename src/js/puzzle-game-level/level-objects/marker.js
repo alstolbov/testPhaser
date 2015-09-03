@@ -2,7 +2,7 @@ var Store = require('../store');
 var GameState = require('../../game-store');
 var Levels = require('../../levels');
 
-var commonFunction = require('../common-function');
+// var commonFunction = require('../common-function');
 
 module.exports = function (data) {
     return create.call(this, data);
@@ -14,8 +14,14 @@ function create(data) {
     markerObj.anchor.setTo(0.5, 0.5);
     this.game.physics.arcade.enable(markerObj);
 
+    if (!data.isShow) {
+        markerObj.alpha = 0.2;
+    }
+
     markerObj.inputEnabled = true;
-    markerObj.input.enableDrag();
+    if (data.isShow) {
+        markerObj.input.enableDrag();
+    }
     markerObj.originalPosition = markerObj.position.clone();
     markerObj.events.onDragStart.add(
         function (sprite, pointer) {
@@ -79,21 +85,15 @@ function onDragStop (currentSprite){
                         Store.state.placeState[currentPlaceOptions.openPlace].isShow = true;
 
                         var nextPlaceOptions = Levels[GameState.currentLevel].places[currentPlaceOptions.openPlace].options;
-                        if (nextPlaceOptions.getColor &&
-                            !Store.levelObjList.markers[nextPlaceOptions.getColor]
-                        ) {
-                            var newMarker = create.call(
-                                _this,
-                                {
-                                    name: nextPlaceOptions.getColor,
-                                    coord: commonFunction.getMarkerPos()
-                                }
-                            );
-                            Store.levelObjList.markers[nextPlaceOptions.getColor] = newMarker;
+                        if (nextPlaceOptions.getColor) {
+                            if (!Store.state.markerState[nextPlaceOptions.getColor].isShow) {
+                                Store.levelObjList.markers[nextPlaceOptions.getColor].alpha = 1;
+                                Store.levelObjList.markers[nextPlaceOptions.getColor].input.enableDrag();
+                                Store.state.markerState[nextPlaceOptions.getColor].isShow = true;
+                            }
                         }
                     }
                 }
-                // currentSprite.position.copyFrom(currentSprite.originalPosition);
             }
         );
         Store.levelObjList.places[Store.state.activePlace].loadTexture('place_' + Store.state.activePlace, 0);
@@ -101,38 +101,9 @@ function onDragStop (currentSprite){
 
     currentSprite.alpha = 1;
     
-    // if (isNeed) {
-    //     currentSprite.position.copyFrom(currentSprite.originalPosition);
-    // }
 
     currentSprite.position.copyFrom(currentSprite.originalPosition);
 
     Store.state.activeMarker = '';
     Store.state.activePlace = '';
 };
-
-// function colorOnTargetPlace () {
-//     var currentPlace = Store.levelObjList.places[Store.state.activePlace];
-//     var currentPlaceStore = Store.state.placeState[Store.state.activePlace];
-//     var currentPlaceOptions = Levels[GameState.currentLevel].places[Store.state.activePlace].options;
-//     currentPlaceStore.state = 'colorize';
-//     currentPlace.tint= 0xff00ff;
-//     currentPlace.loadTexture('place_' + Store.state.activePlace, 3);
-//     Store.state.needForColorize--;
-
-//     if (Store.state.needForColorize) {
-//         Store.levelObjList.statisticText.text = "Need colorize: " + Store.state.needForColorize;
-//     } else {
-//         Store.levelObjList.statisticText.text = 'Great!';
-//     }
-
-//     if (currentPlaceOptions.openPlace) {
-//         Store.levelObjList.places[currentPlaceOptions.openPlace].alpha = 1;
-//         Store.state.placeState[currentPlaceOptions.openPlace].isShow = true;
-
-//         var nextPlaceOptions = Levels[GameState.currentLevel].places[currentPlaceOptions.openPlace].options;
-//         if (nextPlaceOptions.getColor) {
-
-//         }
-//     }
-// };

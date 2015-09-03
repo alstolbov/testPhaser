@@ -2,6 +2,7 @@ var _ = require('lodash');
 var GameStore = require('../../game-store');
 var Store = require('../store');
 var Levels = require('../../levels');
+var ColorRules = require('../../color-rules');
 
 var currentLevel = Levels[GameStore.currentLevel];
 var markerList = currentLevel.markers;
@@ -12,27 +13,6 @@ Store.state.needForColorize = currentLevel.statistic.needForColorize;
 var newMarkerObj = require('../level-objects/marker');
 
 var newPlaceObj = require('../level-objects/place');
-
-var commonFunction = require('../common-function');
-
-// function getMarkerPos () {
-//     var count = 0;
-
-//     if (Store.levelObjList.markers) {
-//         count = _.size(Store.levelObjList.markers);
-//     }
-
-//     var x = options.markerStartPos[0] +
-//         count*(
-//             options.markerSize.width +
-//             options.markerPadding
-//         )
-//     ;
-
-//     var y = options.markerStartPos[1];
-
-//     return [x, y];
-// }
 
 module.exports = function() {
     var _this = this;
@@ -76,20 +56,45 @@ module.exports = function() {
         }
     );
 
+    // _.forEach(
+    //     markerList,
+    //     function (markerName) {
+    //         var obj = newMarkerObj.call(
+    //             _this,
+    //             {
+    //                 name: markerName,
+    //                 coord: commonFunction.getMarkerPos()
+    //             }
+    //         );
+
+    //         Store.levelObjList.markers[markerName] = obj;
+    //     }
+    // );
+
     _.forEach(
-        markerList,
-        function (markerName) {
+        ColorRules,
+        function (markerData, markerName) {
+            var isShow = false;
+            if (markerList.indexOf(markerName) + 1) {
+                isShow = true;
+            }
             var obj = newMarkerObj.call(
                 _this,
                 {
                     name: markerName,
-                    coord: commonFunction.getMarkerPos()
+                    coord: markerData.coord,
+                    isShow: isShow
                 }
             );
 
             Store.levelObjList.markers[markerName] = obj;
+
+            Store.state.markerState[markerName] = {
+                isShow: isShow
+            };
         }
     );
+
 
     var directions = "Need colorize: " + Store.state.needForColorize;
     var style = { font: "12px Arial", fill: "#666", align: "center" };

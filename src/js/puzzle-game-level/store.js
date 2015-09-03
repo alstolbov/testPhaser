@@ -11,6 +11,7 @@ module.exports = {
         activeMarker: '',
         activePlace: '',
         placeState: {},
+        markerState: {},
         needForColorize: 0
     }
 

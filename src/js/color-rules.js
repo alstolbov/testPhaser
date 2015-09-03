@@ -9,9 +9,9 @@ module.exports = {
         coord: [130, 300]
     },
     'blue': {
-        coord: [160, 300]
+        coord: [190, 300]
     },
     'black': {
-        coord: [190, 300]
+        coord: [160, 300]
     }
 };
