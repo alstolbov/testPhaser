@@ -1,6 +1,7 @@
 module.exports = {
 
     '1. Simple': {
+        displayName: 'Все просто',
         markers: [
             'orange',
             'green'
@@ -49,6 +50,7 @@ module.exports = {
     },
 
     '2. Standart': {
+        displayName: 'Посложнее...',
         markers: [
             'orange',
             'green'

@@ -44,34 +44,14 @@ module.exports = function() {
                 placeData
             );
 
-            // if (!placeData.onStart) {
-            //     place.alpha = 0;
-            // }
-
             Store.levelObjList.places[placeName] = place;
             Store.state.placeState[placeName] = {
                 color: placeData.color,
                 state: colorizeStatus,
                 isShow: placeData.onStart
             };
-            // }
         }
     );
-
-    // _.forEach(
-    //     markerList,
-    //     function (markerName) {
-    //         var obj = newMarkerObj.call(
-    //             _this,
-    //             {
-    //                 name: markerName,
-    //                 coord: commonFunction.getMarkerPos()
-    //             }
-    //         );
-
-    //         Store.levelObjList.markers[markerName] = obj;
-    //     }
-    // );
 
     _.forEach(
         ColorRules,

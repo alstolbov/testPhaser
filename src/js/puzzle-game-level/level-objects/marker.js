@@ -21,7 +21,7 @@ function create(data) {
     markerObj.inputEnabled = true;
     if (data.isShow) {
         markerObj.input.enableDrag();
-        this.game.add.tween(markerObj).to({angle: 20}, 1000, Phaser.Easing.Linear.NONE, true, 0, 1000, true);
+        // this.game.add.tween(markerObj).to({angle: 20}, 1000, Phaser.Easing.Linear.NONE, true, 0, 1000, true);
     }
     markerObj.originalPosition = markerObj.position.clone();
     markerObj.events.onDragStart.add(
@@ -167,7 +167,7 @@ function getMarkerActive (markerName) {
     if (!Store.state.markerState[markerName].isShow) {
         marker.alpha = 1;
         marker.input.enableDrag();
-        this.game.add.tween(marker).to({angle: 20}, 1000, Phaser.Easing.Linear.NONE, true, 0, 1000, true);
+        // this.game.add.tween(marker).to({angle: 20}, 1000, Phaser.Easing.Linear.NONE, true, 0, 1000, true);
         Store.state.markerState[markerName].isShow = true;
     }
 }
