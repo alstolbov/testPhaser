@@ -3,9 +3,9 @@ module.exports = {
     preload: function () {
         this.game.load.image('marker_blue', 'img/blue-marker.png');
 
-        var preloadSprite = this.add.sprite(400, 300, 'marker_blue');
-        preloadSprite.anchor.setTo(0.5);
-        this.load.setPreloadSprite(preloadSprite);
+        // var preloadSprite = this.add.sprite(400, 300, 'marker_blue');
+        // preloadSprite.anchor.setTo(0.5);
+        // this.load.setPreloadSprite(preloadSprite);
         
         this.stage.backgroundColor = 0xffffff;
         this.game.load.image('marker_orange', 'img/orange-leaflet-marker-icon.png');
