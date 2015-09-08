@@ -24,6 +24,20 @@ module.exports = function () {
             // _this.game.add.tween(markerObj).to({angle: 20}, 1000, Phaser.Easing.Linear.NONE, true, 0, 1000, true);
             // _this.game.add.tween(markerObj).from( { y: -200 }, 2000, Phaser.Easing.Bounce.Out, true);
 
+            var emitter = _this.game.add.emitter(300, 400, 50);
+            emitter.makeParticles('marker_blue');
+            // emitter.minParticleSpeed.setTo(-400, -400);
+            // emitter.maxParticleSpeed.setTo(400, 400);
+            emitter.setRotation(0, 0);
+            // emitter.setAlpha(0.3, 0.8);
+            // emitter.setAll('alpha', 0.5);
+            emitter.gravity = 0;
+            // emitter.setScale(0.5, 1);
+            _this.game.add.tween(emitter).to({alpha: 0}, 6000, Phaser.Easing.Linear.NONE, true, 0, 1000, true);
+            emitter.start(false, 4000, 15);
+
+            // setTimeout(function () {emitter.on = false;}, 4000);
+            setTimeout(function () {emitter.destroy();}, 2000);
         },
         400
     );
