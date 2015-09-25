@@ -17,6 +17,7 @@ module.exports = {
         this.game.load.spritesheet('place_sun', 'img/1418916390_settings-24.png', 10, 10, 2);
         this.game.load.spritesheet('place_earth', 'img/1419427888_world-24.png', 10, 10, 2);
         this.game.load.bitmapFont('font-desyrel', 'font/desyrel.png', 'font/desyrel.xml');
+        this.game.load.bitmapFont('test-font', 'font/font.png', 'font/font.fnt');
     },
 
     create: function () {
