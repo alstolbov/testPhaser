@@ -18,6 +18,9 @@ module.exports = {
         this.game.load.spritesheet('place_earth', 'img/1419427888_world-24.png', 10, 10, 2);
         this.game.load.bitmapFont('font-desyrel', 'font/desyrel.png', 'font/desyrel.xml');
         this.game.load.bitmapFont('test-font', 'font/font.png', 'font/font.fnt');
+
+        this.game.load.image('simplePopup', 'img/simplePopup.png');
+        this.game.load.image('checkmark', 'img/1422279008_checkmark-24-24.png');
     },
 
     create: function () {
