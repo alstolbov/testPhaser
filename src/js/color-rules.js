@@ -6,7 +6,10 @@ module.exports = {
         }
     },
     'green': {
-        coord: [130, 300]
+        coord: [130, 300],
+        mix: {
+            'orange': 'blue'
+        }
     },
     'blue': {
         coord: [190, 300]

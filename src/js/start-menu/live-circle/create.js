@@ -24,4 +24,6 @@ module.exports = function () {
     // popup.setText("sssss -\ndrag me");
     // this.game.input.onDown.add(popup.openWindow, popup);
 
+    this.game.state.start('puzzle-game-level');
+
 };

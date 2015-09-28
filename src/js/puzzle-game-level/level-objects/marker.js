@@ -1,6 +1,7 @@
 var Store = require('../store');
 var GameState = require('../../game-store');
 var Levels = require('../../levels');
+var colorRules = require('../../color-rules');
 
 // var commonFunction = require('../common-function');
 
@@ -53,11 +54,14 @@ function onDragStop (currentSprite){
     var currentPlace;
     var currentPlaceStore;
     var currentPlaceOptions;
+    var nextMarker;
+    var nextMarkerStore;
+    var nextMarkerOptions;
     var isNeed = true;
 
     var executedScreenPlay = [];
 
-    if (Store.levelObjList.places[Store.state.activePlace]) {
+    if (Store.state.activePlace !== '' && Store.levelObjList.places[Store.state.activePlace]) {
         currentPlace = Store.levelObjList.places[Store.state.activePlace];
         currentPlace.scale.setTo(1, 1);
         currentPlaceStore = Store.state.placeState[Store.state.activePlace];
@@ -105,11 +109,36 @@ function onDragStop (currentSprite){
                     if (executedScreenPlay.length) {
                         execScreenPlay.call(_this, executedScreenPlay);
                     }
-                    console.log(executedScreenPlay);
+                    // console.log(executedScreenPlay);
                 }
             }
         );
         Store.levelObjList.places[Store.state.activePlace].loadTexture('place_' + Store.state.activePlace, 0);
+    }
+
+    if (Store.state.activeNextMarker !== '' && Store.levelObjList.markers[Store.state.activeNextMarker]) {
+        nextMarker = Store.levelObjList.markers[Store.state.activeNextMarker];
+        nextMarkerStore = Store.state.markerState[Store.state.activeNextMarker];
+        isNeed = !this.game.physics.arcade.overlap(
+            currentSprite,
+            nextMarker,
+            function() {
+                if (nextMarkerStore.isShow) {
+                    var rules = colorRules[Store.state.activeNextMarker].mix;
+                    if (rules) {
+                        var createMarker = rules[Store.state.activeMarker];
+                        if (rules &&
+                            createMarker &&
+                            !Store.state.markerState[createMarker].isShow
+                        ) {
+                            Store.levelObjList.markers[createMarker].alpha = 1;
+                            Store.levelObjList.markers[createMarker].input.enableDrag();
+                            Store.state.markerState[createMarker].isShow = true;
+                        }
+                    }
+                }
+            }
+        );
     }
 
     currentSprite.alpha = 1;
@@ -118,6 +147,7 @@ function onDragStop (currentSprite){
 
     Store.state.activeMarker = '';
     Store.state.activePlace = '';
+    Store.state.activeNextMarker = '';
 };
 
 function checkScreenplay () {

@@ -30,6 +30,19 @@ module.exports = function() {
                 }
             }
         );
+        _.forEach(
+            Store.levelObjList.markers,
+            function (marker, markerName) {
+                var res = compareObj.call(_this, obj, marker);
+                if (markerName !== Store.state.activeMarker) {
+                    if (!res) {
+                        Store.state.activeNextMarker = markerName;
+                    } else {
+                        // obj.alpha = 0.5;
+                    }
+                }
+            }
+        );
     }
 };
 
