@@ -1,3 +1,5 @@
+онсервация ветки с hot reload
+
 Ресурс для создания bitMap Fonts - http://kvazars.com/littera/
 
 - задания (продумать логику screenPlay):
