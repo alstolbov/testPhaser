@@ -1,3 +1,5 @@
+var _ = require('lodash');
+
 var Store = require('../store');
 var GameState = require('../../game-store');
 var Levels = require('../../levels');
