@@ -189,6 +189,9 @@ function execScreenPlay (screenplayArray) {
             if (screenplays[screenPlayName].result.getColor) {
                 getMarkerActive.call(_this, screenplays[screenPlayName].result.getColor);
             }
+            if (screenplays[screenPlayName].result.execute) {
+                screenplays[screenPlayName].result.execute.call(_this);
+            }
         }
     );
 }

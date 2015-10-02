@@ -1,3 +1,5 @@
+var Store = require('./puzzle-game-level/store');
+
 module.exports = {
 
     '1. Simple': {
@@ -42,7 +44,13 @@ module.exports = {
                 // placeFalse: [],
                 amimation: 'some',
                 result: {
-                    getColor: 'blue'
+                    getColor: 'blue',
+                    execute: function () {
+                        var obj = Store.levelObjList.places.sun;
+                        var tw = this.game.add.tween(obj);
+                        tw.to( { x: 200, y: 100, alpha: 0 }, 1000, Phaser.Easing.Linear.NONE, true, 0, 20, true);
+                        tw.start();
+                    }
                 } 
                 
             }
