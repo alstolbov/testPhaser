@@ -21,6 +21,9 @@ module.exports = function() {
     // Store.state.activePlace = '';
     this.stage.backgroundColor = 0xffffff;
 
+    //upload from base64
+    //this.game.add.sprite(360, 30, 'image-data');
+
     Store.state.screenplays = currentLevel.screenplay;
 
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
