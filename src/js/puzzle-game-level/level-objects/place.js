@@ -1,6 +1,11 @@
 var Store = require('../store');
+var GameStore = require('../../game-store');
+var Levels = require('../../levels');
+
+var popup = require('../../common-game-objects/popup');
 
 module.exports = function (data) {
+    var _this = this;
     var placeSprite = 'place_' + data.name;
     var placeObj = Store.levelObjList.placeGroup.create(data.coord[0], data.coord[1], placeSprite);
     // Store.levelObjList.trash = this.add.sprite(this.game.world.centerX + 100, this.game.world.centerY, 'trashSprite');
@@ -9,8 +14,13 @@ module.exports = function (data) {
     this.game.physics.arcade.enable(placeObj);
 
     placeObj.inputEnabled = true;
-    placeObj.events.onInputOver.add(onMouseOver, this);
-    placeObj.events.onInputOut.add(onMouseOut, this);
+    // placeObj.events.onInputOver.add(onMouseOver, this);
+    // placeObj.events.onInputOut.add(onMouseOut, this);
+    placeObj.events.onInputDown.add(
+        function () {
+            onClick.call(_this, data.name);
+        }
+    );
 
     if (!data.onStart) {
         placeObj.alpha = 0;
@@ -31,3 +41,12 @@ function onMouseOver (sprite) {
 function onMouseOut (sprite) {
     sprite.alpha = 1;
 };
+
+function onClick (name) {
+    var currentLevel = Levels[GameStore.currentLevel];
+    var objOptions = Levels[GameStore.currentLevel].places[name].options;
+    if (objOptions.popupText) {
+        popup.create(this, objOptions.popupText);
+        popup.openWindow();
+    }
+}

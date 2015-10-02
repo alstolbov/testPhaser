@@ -14,6 +14,7 @@ module.exports = {
                 coord: [100, 200],
                 onStart: true,
                 options: {
+                    popupText: 'Sun is shining!',
                     needColor: 'orange',
                     openPlace: 'grow'
                 }

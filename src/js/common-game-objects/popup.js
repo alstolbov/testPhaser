@@ -1,8 +1,8 @@
 module.exports = {
 
-    create: function (_this) {
+    create: function (_this, text) {
         this._this = _this;
-        this.text = '';
+        this.text = text || '';
         this.tween;
         this.popup = _this.game.add.sprite(_this.game.world.centerX, _this.game.world.centerY, 'simplePopup');
         this.textStyle = { font: "12px Arial", fill: "#000000", wordWrap: true, wordWrapWidth: this.popup.width, align: "center" };
@@ -39,6 +39,7 @@ module.exports = {
         }
         this.tween = this._this.game.add.tween(this.popup.scale).to( { x: 0, y: 0 }, 500, Phaser.Easing.Elastic.In, true);
         this.text.destroy();
+        this.popup.destroy();
     }
 
 };

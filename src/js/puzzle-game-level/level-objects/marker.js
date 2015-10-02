@@ -5,6 +5,8 @@ var GameState = require('../../game-store');
 var Levels = require('../../levels');
 var colorRules = require('../../color-rules');
 
+var winSmogue = require('../../common-game-objects/win-smog');
+
 // var commonFunction = require('../common-function');
 
 module.exports = function (data) {
@@ -82,6 +84,8 @@ function onDragStop (currentSprite){
                     currentPlace.tint = 0xff00ff;
                     currentPlace.loadTexture('place_' + Store.state.activePlace, 3);
                     Store.state.needForColorize--;
+
+                    winSmogue.call(_this, currentSprite.position);
 
                     if (Store.state.needForColorize) {
                         Store.levelObjList.statisticText.text = "Need colorize: " + Store.state.needForColorize;
