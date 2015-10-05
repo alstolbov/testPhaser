@@ -1,5 +1,7 @@
 var _ = require('lodash');
 var Store = require('../store');
+var Levels = require('../../levels');
+var GameState = require('../../game-store');
 
 module.exports = function() {
     var _this = this;
@@ -10,22 +12,80 @@ module.exports = function() {
             Store.levelObjList.places,
             function (place, placeName) {
                 var res = compareObj.call(_this, obj, place);
-                var placeState = Store.state.placeState[placeName];
+                var currentPlaceData = Levels[GameState.currentLevel].places[placeName];
+                var placeState;
+                if (!currentPlaceData.group) {
+                    placeState = Store.state.placeState[placeName];
+                } else {
+                    placeState = Store.state.placeGroupState[currentPlaceData.group];
+                }
                 if (placeState.state == 'uncolorize' &&
                     placeState.isShow
                 ) {
+                    
                     if (!res) {
-                        place.bringToTop();
-                        place.scale.setTo(2, 2);
-                        place.loadTexture('place_' + placeName, 1);
+
                         Store.state.activePlace = placeName;
-                        // if (Store.state.placeState[placeName].color == Store.state.activeMarker) {
-                        //     obj.alpha = 1;
-                        // }
+
+                        if (!currentPlaceData.group) {
+                            // Store.state.activePlaceGroup = '';
+                            place.bringToTop();
+                            place.scale.setTo(2, 2);
+                            place.loadTexture(
+                                currentPlaceData.spriteName ?
+                                    'place_' + currentPlaceData.spriteName :
+                                    'place_' + placeName,
+                                1
+                            );
+                        } else {
+                            Store.state.activePlaceGroup = currentPlaceData.group;
+                            _.forEach(
+                                Store.levelObjList.placeGroup[currentPlaceData.group],
+                                function (grPlaceName) {
+                                    var placeInGroup = Store.levelObjList.places[grPlaceName];
+                                    currentPlaceData = Levels[GameState.currentLevel].places[grPlaceName]
+                                    placeInGroup.bringToTop();
+                                    placeInGroup.scale.setTo(2, 2);
+                                    placeInGroup.loadTexture(
+                                        currentPlaceData.spriteName ?
+                                            'place_' + currentPlaceData.spriteName :
+                                            'place_' + grPlaceName,
+                                        1
+                                    );
+                                }
+                            );
+                        }
+
                     } else {
-                        place.scale.setTo(1, 1);
-                        place.loadTexture('place_' + placeName, 0);
-                        // obj.alpha = 0.5;
+
+                        if (!currentPlaceData.group) {
+                            Store.state.activePlaceGroup = '';
+                            place.scale.setTo(1, 1);
+                            place.loadTexture(
+                                currentPlaceData.spriteName ?
+                                    'place_' + currentPlaceData.spriteName :
+                                    'place_' + placeName,
+                                0
+                            );
+                        } else {
+                            if (currentPlaceData.group !== Store.state.activePlaceGroup) {
+                                _.forEach(
+                                    Store.levelObjList.placeGroup[currentPlaceData.group],
+                                    function (grPlaceName) {
+                                        var placeInGroup = Store.levelObjList.places[grPlaceName];
+                                        currentPlaceData = Levels[GameState.currentLevel].places[grPlaceName];
+                                        place.scale.setTo(1, 1);
+                                        placeInGroup.loadTexture(
+                                            currentPlaceData.spriteName ?
+                                                'place_' + currentPlaceData.spriteName :
+                                                'place_' + grPlaceName,
+                                            0
+                                        );
+                                    }
+                                );
+                            }
+                        }
+
                     }
                 }
             }

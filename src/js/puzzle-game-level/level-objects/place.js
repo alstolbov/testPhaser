@@ -6,8 +6,10 @@ var popup = require('../../common-game-objects/popup');
 
 module.exports = function (data) {
     var _this = this;
-    var placeSprite = 'place_' + data.name;
-    var placeObj = Store.levelObjList.placeGroup.create(data.coord[0], data.coord[1], placeSprite);
+    var placeSprite = data.spriteName ?
+        'place_' + data.spriteName :
+        'place_' + data.name;
+    var placeObj = Store.levelObjList.placeLayer.create(data.coord[0], data.coord[1], placeSprite);
     // Store.levelObjList.trash = this.add.sprite(this.game.world.centerX + 100, this.game.world.centerY, 'trashSprite');
     placeObj.anchor.setTo(0.5, 0.5);
     // Store.levelObjList.trash.tint= 0xff00ff;

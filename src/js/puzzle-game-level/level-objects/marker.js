@@ -57,6 +57,7 @@ function onDragStop (currentSprite){
     Store.state.isActiveDrag = false;
     var currentPlace;
     var currentPlaceStore;
+    var currentPlaceData;
     var currentPlaceOptions;
     var nextMarker;
     var nextMarkerStore;
@@ -68,8 +69,13 @@ function onDragStop (currentSprite){
     if (Store.state.activePlace !== '' && Store.levelObjList.places[Store.state.activePlace]) {
         currentPlace = Store.levelObjList.places[Store.state.activePlace];
         currentPlace.scale.setTo(1, 1);
-        currentPlaceStore = Store.state.placeState[Store.state.activePlace];
-        currentPlaceOptions = Levels[GameState.currentLevel].places[Store.state.activePlace].options;
+        currentPlaceData = Levels[GameState.currentLevel].places[Store.state.activePlace];
+        if (!currentPlaceData.group) {
+            currentPlaceStore = Store.state.placeState[Store.state.activePlace];
+        } else {
+            currentPlaceStore = Store.state.placeGroupState[currentPlaceData.group];
+        }
+        currentPlaceOptions = currentPlaceData.options;
         isNeed = !this.game.physics.arcade.overlap(
             currentSprite,
             currentPlace,
@@ -81,8 +87,33 @@ function onDragStop (currentSprite){
                     // currentSprite.position.copyFrom(currentPlace.position); 
                     // currentSprite.anchor.setTo(currentPlace.anchor.x, currentPlace.anchor.y);
                     currentPlaceStore.state = 'colorize';
-                    currentPlace.tint = 0xff00ff;
-                    currentPlace.loadTexture('place_' + Store.state.activePlace, 3);
+
+                    if (!currentPlaceData.group) {
+                        currentPlace.tint = 0xff00ff;
+                        currentPlace.loadTexture(
+                            currentPlaceData.spriteName ?
+                                'place_' + currentPlaceData.spriteName :
+                                'place_' + Store.state.activePlace,
+                            3
+                        );
+                    } else {
+                        _.forEach(
+                            Store.levelObjList.placeGroup[currentPlaceData.group],
+                            function (placeInGr) {
+                                var grPlace = Store.levelObjList.places[placeInGr];
+                                grPlace.tint = 0xff00ff;
+                                grPlace.scale.setTo(1, 1);
+                                grPlace.loadTexture(
+                                    currentPlaceData.spriteName ?
+                                        'place_' + currentPlaceData.spriteName :
+                                        'place_' + Store.state.activePlace,
+                                    3
+                                );
+                            }
+                        );
+                    }
+
+
                     Store.state.needForColorize--;
 
                     winSmogue.call(_this, currentSprite.position);
@@ -119,7 +150,12 @@ function onDragStop (currentSprite){
                 }
             }
         );
-        Store.levelObjList.places[Store.state.activePlace].loadTexture('place_' + Store.state.activePlace, 0);
+        Store.levelObjList.places[Store.state.activePlace].loadTexture(
+            currentPlaceData.spriteName ?
+                'place_' + currentPlaceData.spriteName :
+                'place_' + Store.state.activePlace,
+            0
+        );
     }
 
     if (Store.state.activeNextMarker !== '' && Store.levelObjList.markers[Store.state.activeNextMarker]) {
@@ -153,6 +189,7 @@ function onDragStop (currentSprite){
 
     Store.state.activeMarker = '';
     Store.state.activePlace = '';
+    Store.state.activePlaceGroup = '';
     Store.state.activeNextMarker = '';
 };
 
@@ -166,7 +203,14 @@ function checkScreenplay () {
             _.forEach(
                 screenplayData.placesColorized,
                 function (place) {
-                    if (Store.state.placeState[place].state !== 'colorize') {
+                    var currentPlaceData = Levels[GameState.currentLevel].places[place];
+                    var colorState;
+                    if (!currentPlaceData.group) {
+                        colorState = Store.state.placeState[place].state;
+                    } else {
+                        colorState = Store.state.placeGroupState[currentPlaceData.group].state;
+                    }
+                    if (colorState !== 'colorize') {
                         isExecute = false;
                     }
                 }

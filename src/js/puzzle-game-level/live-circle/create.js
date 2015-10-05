@@ -28,7 +28,7 @@ module.exports = function() {
 
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
-    Store.levelObjList.placeGroup = this.game.add.group();
+    Store.levelObjList.placeLayer = this.game.add.group();
     _.forEach(
         placeList,
         function (placeData, placeName) {
@@ -48,11 +48,27 @@ module.exports = function() {
             );
 
             Store.levelObjList.places[placeName] = place;
-            Store.state.placeState[placeName] = {
-                color: placeData.color,
-                state: colorizeStatus,
-                isShow: placeData.onStart
-            };
+
+            if (!placeData.group) {
+                Store.state.placeState[placeName] = {
+                    // color: placeData.color,
+                    state: colorizeStatus,
+                    isShow: placeData.onStart
+                };
+
+            } else {
+                if (!Store.state.placeGroupState.hasOwnProperty(placeData.group)) {
+                    Store.state.placeGroupState[placeData.group] = {
+                        // color: placeData.color,
+                        state: colorizeStatus,
+                        isShow: placeData.onStart
+                    };
+                }
+                if (!Store.levelObjList.placeGroup.hasOwnProperty(placeData.group)) {
+                    Store.levelObjList.placeGroup[placeData.group] = [];
+                }
+                Store.levelObjList.placeGroup[placeData.group].push(placeName);
+            }
         }
     );
 

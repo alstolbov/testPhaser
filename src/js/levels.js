@@ -12,7 +12,20 @@ module.exports = {
         places: {
             'sun': {
                 coord: [100, 200],
+                spriteName: 'sun', 
                 onStart: true,
+                group: 'suns',
+                options: {
+                    popupText: 'Sun is shining!',
+                    needColor: 'orange',
+                    openPlace: 'grow'
+                }
+            },
+            'nextSun': {
+                coord: [100, 100],
+                spriteName: 'sun', 
+                onStart: true,
+                group: 'suns',
                 options: {
                     popupText: 'Sun is shining!',
                     needColor: 'orange',
