@@ -15,6 +15,7 @@ module.exports = {
                 spriteName: 'sun', 
                 onStart: true,
                 group: 'suns',
+                interactive: true,
                 options: {
                     popupText: 'Sun is shining!',
                     needColor: 'orange',
@@ -26,6 +27,7 @@ module.exports = {
                 spriteName: 'sun', 
                 onStart: true,
                 group: 'suns',
+                interactive: true,
                 options: {
                     popupText: 'Sun is shining!',
                     needColor: 'orange',
@@ -35,6 +37,7 @@ module.exports = {
             'grow': {
                 coord: [150, 200],
                 onStart: true,
+                interactive: true,
                 options: {
                     needColor: 'green',
                     onColorizeAnimation: 'some_animation',
@@ -44,11 +47,18 @@ module.exports = {
             'earth': {
                 coord: [190, 200],
                 onStart: true,
+                interactive: true,
                 options: {
                     needColor: 'blue'
                 }
             },
+            'someObject': {
+                coord: [50, 50],
+                spriteName: 'sun',
+                interactive: false
+            }
         },
+
         statistic: {
             needForColorize: 3
         },

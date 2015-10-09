@@ -36,7 +36,7 @@ module.exports = function() {
             var colorizeStatus;
             placeData.name = placeName;
 
-            if (placeData.options.needColor) {
+            if (placeData.options && placeData.options.needColor) {
                 colorizeStatus = 'uncolorize';
             } else {
                 colorizeStatus = 'colorize';
@@ -47,27 +47,31 @@ module.exports = function() {
                 placeData
             );
 
-            Store.levelObjList.places[placeName] = place;
-
-            if (!placeData.group) {
-                Store.state.placeState[placeName] = {
-                    // color: placeData.color,
-                    state: colorizeStatus,
-                    isShow: placeData.onStart
-                };
-
+            if (!placeData.interactive) {
+                Store.levelObjList.simpleObjects[placeName] = place;
             } else {
-                if (!Store.state.placeGroupState.hasOwnProperty(placeData.group)) {
-                    Store.state.placeGroupState[placeData.group] = {
+                Store.levelObjList.places[placeName] = place;
+
+                if (!placeData.group) {
+                    Store.state.placeState[placeName] = {
                         // color: placeData.color,
                         state: colorizeStatus,
                         isShow: placeData.onStart
                     };
+
+                } else {
+                    if (!Store.state.placeGroupState.hasOwnProperty(placeData.group)) {
+                        Store.state.placeGroupState[placeData.group] = {
+                            // color: placeData.color,
+                            state: colorizeStatus,
+                            isShow: placeData.onStart
+                        };
+                    }
+                    if (!Store.levelObjList.placeGroup.hasOwnProperty(placeData.group)) {
+                        Store.levelObjList.placeGroup[placeData.group] = [];
+                    }
+                    Store.levelObjList.placeGroup[placeData.group].push(placeName);
                 }
-                if (!Store.levelObjList.placeGroup.hasOwnProperty(placeData.group)) {
-                    Store.levelObjList.placeGroup[placeData.group] = [];
-                }
-                Store.levelObjList.placeGroup[placeData.group].push(placeName);
             }
         }
     );

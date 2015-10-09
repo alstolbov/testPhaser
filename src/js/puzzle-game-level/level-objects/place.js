@@ -15,22 +15,24 @@ module.exports = function (data) {
     // Store.levelObjList.trash.tint= 0xff00ff;
     this.game.physics.arcade.enable(placeObj);
 
-    placeObj.inputEnabled = true;
-    // placeObj.events.onInputOver.add(onMouseOver, this);
-    // placeObj.events.onInputOut.add(onMouseOut, this);
-    placeObj.events.onInputDown.add(
-        function () {
-            onClick.call(_this, data.name);
+    if (data.interactive) {
+        placeObj.inputEnabled = true;
+        // placeObj.events.onInputOver.add(onMouseOver, this);
+        // placeObj.events.onInputOut.add(onMouseOut, this);
+        placeObj.events.onInputDown.add(
+            function () {
+                onClick.call(_this, data.name);
+            }
+        );
+
+        if (!data.onStart) {
+            placeObj.alpha = 0;
         }
-    );
 
-    if (!data.onStart) {
-        placeObj.alpha = 0;
-    }
-
-    if (!data.options.needColor) {
-       placeObj.tint = 0xff00ff;
-       placeObj.loadTexture(placeSprite, 3);
+        if (!data.options.needColor) {
+           placeObj.tint = 0xff00ff;
+           placeObj.loadTexture(placeSprite, 3);
+        }
     }
 
     return placeObj;

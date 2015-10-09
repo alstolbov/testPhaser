@@ -5,6 +5,7 @@ module.exports = {
         markers: {},
         placeGroup: {},
         placeGroupOptions: {},
+        simpleObjects: {},
         statisticText: false
     },
 
