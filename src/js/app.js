@@ -4,9 +4,10 @@ var GameOptions = require('./options');
 
 GameStore.currentLevel = '1. Simple';
 
-var puzzleGameLevel = require('./puzzle-game-level/index');
+// var puzzleGameLevel = require('./puzzle-game-level/index');
 var startMenu = require('./start-menu/index');
 var Preloader = require('./preloader/index');
+var simpleDraw = require('./drawer/index');
 
 
 var deviseScreen = {
@@ -22,8 +23,9 @@ var game = new Phaser.Game(
     GameOptions.divContainer
 );
 
-game.state.add('puzzle-game-level', puzzleGameLevel);
+// game.state.add('puzzle-game-level', puzzleGameLevel);
 game.state.add('start-menu', startMenu);
 game.state.add('preloader', Preloader);
+game.state.add('simple-draw', simpleDraw);
 game.state.start('preloader');
 // game.state.start('puzzle-game-level');
